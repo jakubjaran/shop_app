@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../models/product.dart';
+import '../screens/product_details_screen.dart';
 
 class ProductGridTile extends StatelessWidget {
-  final Product product;
+  final String id;
+  final String title;
+  final String imageUrl;
+  final double price;
 
-  ProductGridTile(this.product);
+  ProductGridTile(
+    this.id,
+    this.title,
+    this.imageUrl,
+    this.price,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +26,7 @@ class ProductGridTile extends StatelessWidget {
       child: GridTile(
         header: GridTileBar(
           title: Text(
-            '\$${product.price.toString()}',
+            '\$${price.toString()}',
             style: TextStyle(
               background: Paint()
                 ..color = Theme.of(context).primaryColor
@@ -28,9 +36,17 @@ class ProductGridTile extends StatelessWidget {
             textAlign: TextAlign.end,
           ),
         ),
-        child: Image.network(
-          product.imageUrl,
-          fit: BoxFit.cover,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              ProductDetailsScreen.routeName,
+              arguments: id,
+            );
+          },
+          child: Image.network(
+            imageUrl,
+            fit: BoxFit.cover,
+          ),
         ),
         footer: Container(
           decoration: BoxDecoration(
@@ -41,7 +57,7 @@ class ProductGridTile extends StatelessWidget {
           child: GridTileBar(
             backgroundColor: Colors.white,
             title: Text(
-              product.title,
+              title,
               style: TextStyle(color: Colors.black),
               textAlign: TextAlign.center,
             ),

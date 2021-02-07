@@ -53,7 +53,12 @@ class ProductsOverviewScreen extends StatelessWidget {
           crossAxisSpacing: 10,
           childAspectRatio: 4 / 5,
         ),
-        itemBuilder: (ctx, i) => ProductGridTile(loadedProducts[i]),
+        itemBuilder: (ctx, i) => ProductGridTile(
+          loadedProducts[i].id,
+          loadedProducts[i].title,
+          loadedProducts[i].imageUrl,
+          loadedProducts[i].price,
+        ),
         itemCount: loadedProducts.length,
       ),
     );
