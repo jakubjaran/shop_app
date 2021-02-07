@@ -9,24 +9,41 @@ class ProductGridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridTile(
-      child: Image.network(
-        product.imageUrl,
-        fit: BoxFit.cover,
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 6),
+        ],
       ),
-      footer: GridTileBar(
-        backgroundColor: Colors.black54,
-        title: Text(
-          product.title,
-          textAlign: TextAlign.center,
+      child: GridTile(
+        child: Image.network(
+          product.imageUrl,
+          fit: BoxFit.cover,
         ),
-        leading: IconButton(
-          icon: Icon(Icons.favorite_outline),
-          onPressed: () {},
-        ),
-        trailing: IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {},
+        footer: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Theme.of(context).accentColor, width: 2),
+            ),
+          ),
+          child: GridTileBar(
+            backgroundColor: Colors.white,
+            title: Text(
+              product.title,
+              style: TextStyle(color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.favorite_outline),
+              onPressed: () {},
+              color: Theme.of(context).accentColor,
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+              color: Theme.of(context).accentColor,
+            ),
+          ),
         ),
       ),
     );
