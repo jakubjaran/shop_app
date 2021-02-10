@@ -7,7 +7,7 @@ import '../screens/product_details_screen.dart';
 class ProductGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -52,14 +52,16 @@ class ProductGridTile extends StatelessWidget {
               style: TextStyle(color: Colors.black),
               textAlign: TextAlign.center,
             ),
-            leading: IconButton(
-              icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border,
+            leading: Consumer<Product>(
+              builder: (ctx, product, child) => IconButton(
+                icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                ),
+                onPressed: () {
+                  product.toggleFavorite();
+                },
+                color: Theme.of(context).accentColor,
               ),
-              onPressed: () {
-                product.toggleFavorite();
-              },
-              color: Theme.of(context).accentColor,
             ),
             trailing: IconButton(
               icon: Icon(Icons.shopping_cart),
