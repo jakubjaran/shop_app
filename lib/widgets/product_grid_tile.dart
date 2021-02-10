@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/product.dart';
 import '../screens/product_details_screen.dart';
 
 class ProductGridTile extends StatelessWidget {
-  final String id;
-  final String title;
-  final String imageUrl;
-  final double price;
-
-  ProductGridTile(
-    this.id,
-    this.title,
-    this.imageUrl,
-    this.price,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context);
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -26,7 +17,7 @@ class ProductGridTile extends StatelessWidget {
       child: GridTile(
         header: GridTileBar(
           title: Text(
-            '\$${price.toString()}',
+            '\$${product.price.toString()}',
             style: TextStyle(
               background: Paint()
                 ..color = Theme.of(context).primaryColor
@@ -40,11 +31,11 @@ class ProductGridTile extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(
               ProductDetailsScreen.routeName,
-              arguments: id,
+              arguments: product.id,
             );
           },
           child: Image.network(
-            imageUrl,
+            product.imageUrl,
             fit: BoxFit.cover,
           ),
         ),
@@ -57,13 +48,17 @@ class ProductGridTile extends StatelessWidget {
           child: GridTileBar(
             backgroundColor: Colors.white,
             title: Text(
-              title,
+              product.title,
               style: TextStyle(color: Colors.black),
               textAlign: TextAlign.center,
             ),
             leading: IconButton(
-              icon: Icon(Icons.favorite_outline),
-              onPressed: () {},
+              icon: Icon(
+                product.isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              onPressed: () {
+                product.toggleFavorite();
+              },
               color: Theme.of(context).accentColor,
             ),
             trailing: IconButton(
