@@ -13,6 +13,9 @@ class Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (value == "0") {
+      return child;
+    }
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -35,6 +38,7 @@ class Badge extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 10,
+                color: Colors.white,
               ),
             ),
           ),

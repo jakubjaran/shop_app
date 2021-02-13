@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
 import '../screens/product_details_screen.dart';
+import '../widgets/badge.dart';
 
 class ProductGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cart = Provider.of<Cart>(context);
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -65,12 +66,20 @@ class ProductGridTile extends StatelessWidget {
                 color: Theme.of(context).accentColor,
               ),
             ),
-            trailing: IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {
-                cart.addItem(product.id, product.title, product.price);
-              },
-              color: Theme.of(context).accentColor,
+            trailing: Badge(
+              value: cart.itemQuanity(product.id).toString(),
+              color: Colors.redAccent,
+              child: IconButton(
+                icon: Icon(
+                  cart.itemQuanity(product.id) > 0
+                      ? Icons.shopping_cart
+                      : Icons.shopping_cart_outlined,
+                ),
+                onPressed: () {
+                  cart.addItem(product.id, product.title, product.price);
+                },
+                color: Theme.of(context).accentColor,
+              ),
             ),
           ),
         ),
