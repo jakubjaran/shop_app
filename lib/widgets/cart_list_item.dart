@@ -41,7 +41,7 @@ class CartListItem extends StatelessWidget {
         child: ListTile(
           leading: Chip(
             label: Text(
-              '\$${(price * quantity)}',
+              '\$${(price * quantity).toStringAsFixed(2)}',
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Theme.of(context).accentColor,
