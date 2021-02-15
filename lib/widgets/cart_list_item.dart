@@ -20,19 +20,6 @@ class CartListItem extends StatelessWidget {
         color: Colors.white,
       ),
       child: ListTile(
-        // leading: CircleAvatar(
-        //   backgroundColor: Theme.of(context).accentColor,
-        //   foregroundColor: Colors.white,
-        //   child: Padding(
-        //     padding: EdgeInsets.all(3),
-        //     child: FittedBox(
-        //       child: Text(
-        //         '\$$price',
-        //         style: TextStyle(fontWeight: FontWeight.bold),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         leading: Chip(
           label: Text(
             '\$${(price * quantity)}',

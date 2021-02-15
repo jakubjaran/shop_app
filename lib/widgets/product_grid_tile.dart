@@ -19,15 +19,10 @@ class ProductGridTile extends StatelessWidget {
       ),
       child: GridTile(
         header: GridTileBar(
-          title: Text(
-            '\$${product.price.toString()}',
-            style: TextStyle(
-              background: Paint()
-                ..color = Theme.of(context).primaryColor
-                ..strokeWidth = 17
-                ..style = PaintingStyle.stroke,
-            ),
-            textAlign: TextAlign.end,
+          title: SizedBox(),
+          trailing: Chip(
+            label: Text('\$${product.price}'),
+            backgroundColor: Theme.of(context).accentColor,
           ),
         ),
         child: GestureDetector(
