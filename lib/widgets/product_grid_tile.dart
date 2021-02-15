@@ -14,7 +14,7 @@ class ProductGridTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(color: Colors.black26, blurRadius: 6),
+          BoxShadow(color: Colors.black12, blurRadius: 6),
         ],
       ),
       child: GridTile(

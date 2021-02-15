@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
+import '../widgets/cart_list_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -15,36 +16,57 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Card(
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Colors.black12, blurRadius: 6),
+              ],
+            ),
             margin: EdgeInsets.all(15),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Spacer(),
-                  Chip(
-                    label: Text(
-                      '\$${cart.totalAmount}',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total',
+                  style: TextStyle(fontSize: 18),
+                ),
+                Spacer(),
+                Chip(
+                  label: Text(
+                    '\$${cart.totalAmount}',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
-                    backgroundColor: Theme.of(context).accentColor,
                   ),
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text('ORDER NOW',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
+                  backgroundColor: Theme.of(context).accentColor,
+                ),
+                FlatButton(
+                  onPressed: () {},
+                  child: Text('ORDER NOW',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: cart.items.length,
+              itemBuilder: (ctx, i) {
+                var item = cart.items.values.toList()[i];
+                return CartListItem(
+                  item.id,
+                  item.title,
+                  item.price,
+                  item.quantity,
+                );
+              },
             ),
           ),
         ],
