@@ -17,6 +17,8 @@ class OrderListItem extends StatelessWidget {
         ],
         color: Colors.white,
       ),
+      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       child: ListTile(
         leading: Chip(
           label: Text(
@@ -26,7 +28,7 @@ class OrderListItem extends StatelessWidget {
           backgroundColor: Theme.of(context).accentColor,
         ),
         title: Text(
-          DateFormat('dd MMMM yyyy hh:mm').format(order.date),
+          DateFormat('dd/MM/yyyy | hh:mm').format(order.date),
         ),
         trailing: IconButton(
           icon: Icon(Icons.expand_more),
