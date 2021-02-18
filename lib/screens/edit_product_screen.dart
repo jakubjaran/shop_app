@@ -42,6 +42,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _updateImageUrl() {
+    final value = _imageUrlController.text;
+    if ((!value.startsWith('http') && !value.startsWith('https')) ||
+        (!value.endsWith('.png') &&
+            !value.endsWith('.jpg') &&
+            !value.endsWith('.jpeg'))) {
+      return;
+    }
     setState(() {});
   }
 
@@ -116,6 +123,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       imageUrl: _editedProduct.imageUrl,
                     );
                   },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'You have to enter a price.';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'You have to enter a valid number.';
+                    }
+                    if (double.parse(value) <= 0) {
+                      return 'Price needs to be greater than 0.';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Description'),
@@ -130,6 +149,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                     );
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'You have to enter a description.';
+                    }
+                    if (value.length < 10) {
+                      return 'Description needs to be at least 10 characters long.';
+                    }
+                    return null;
                   },
                 ),
                 Row(
@@ -171,6 +199,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             price: _editedProduct.price,
                             imageUrl: value,
                           );
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'You have to enter image URL.';
+                          }
+                          if (!value.startsWith('http') &&
+                              !value.startsWith('https')) {
+                            return 'You have to enter a valid URL.';
+                          }
+                          if (!value.endsWith('.png') &&
+                              !value.endsWith('.jpg') &&
+                              !value.endsWith('.jpeg')) {
+                            return 'You have to enter valid image URL.';
+                          }
+                          return null;
                         },
                       ),
                     )
