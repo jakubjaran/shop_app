@@ -46,6 +46,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
     _form.currentState.save();
     print(_editedProduct.title);
     print(_editedProduct.description);
@@ -85,6 +89,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                     );
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'You have to provide a title.';
+                    }
+                    if (value.length < 3) {
+                      return 'Title needs to be at least 3 characters long.';
+                    }
+                    return null;
                   },
                 ),
                 TextFormField(
