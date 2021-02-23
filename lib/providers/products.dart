@@ -101,6 +101,19 @@ class Products with ChangeNotifier {
   }
 
   void deleteItem(String id) {
+    final url =
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id';
+    final existingProductIndex = _items.indexWhere((item) => item.id == id);
+    var existingProduct = _items[existingProductIndex];
+    http.delete(url).then((response) {
+      if (response.statusCode >= 400) {
+        // todo throw error
+      }
+      existingProduct = null;
+    }).catchError((error) {
+      print(error);
+      _items.insert(existingProductIndex, existingProduct);
+    });
     _items.removeWhere((item) => item.id == id);
     notifyListeners();
   }
