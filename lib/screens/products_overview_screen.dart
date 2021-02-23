@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/products_grid.dart';
+import '../providers/products.dart';
 import '../providers/cart.dart';
-import '../widgets/badge.dart';
+
 import '../screens/cart_screen.dart';
+
+import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
 import '../widgets/app_drawer.dart';
 
 enum FilterOptions {
@@ -19,6 +22,15 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showFavoritesOnly = false;
+  var _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<Products>(context).fetchAndSetItems();
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {

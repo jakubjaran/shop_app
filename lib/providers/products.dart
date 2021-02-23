@@ -93,4 +93,15 @@ class Products with ChangeNotifier {
     _items.removeWhere((item) => item.id == id);
     notifyListeners();
   }
+
+  Future<void> fetchAndSetItems() async {
+    const url =
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json';
+    try {
+      final response = await http.get(url);
+      print(json.decode(response.body));
+    } catch (error) {
+      throw error;
+    }
+  }
 }
