@@ -81,9 +81,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  void updateItem(String id, Product updatedProduct) {
+  Future<void> updateItem(String id, Product updatedProduct) async {
     final productIndex = _items.indexWhere((item) => item.id == id);
     if (productIndex >= 0) {
+      final url =
+          'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
+      await http.patch(
+        url,
+        body: json.encode({
+          'title': updatedProduct.title,
+          'imageUrl': updatedProduct.imageUrl,
+          'description': updatedProduct.description,
+          'price': updatedProduct.price,
+        }),
+      );
       _items[productIndex] = updatedProduct;
       notifyListeners();
     }
