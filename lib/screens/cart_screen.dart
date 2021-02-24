@@ -6,8 +6,16 @@ import '../providers/orders.dart';
 
 import '../widgets/cart_list_item.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  var _isLoading = false;
+  var _canOrder = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +54,31 @@ class CartScreen extends StatelessWidget {
                   backgroundColor: Theme.of(context).accentColor,
                 ),
                 FlatButton(
-                  onPressed: () {
-                    orders.addOrder(
-                      cart.items.values.toList(),
-                      cart.totalAmount,
-                    );
-                    cart.clear();
-                  },
-                  child: Text(
-                    'ORDER NOW',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  onPressed: cart.itemsCount > 0
+                      ? () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await orders.addOrder(
+                            cart.items.values.toList(),
+                            cart.totalAmount,
+                          );
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          cart.clear();
+                        }
+                      : null,
+                  disabledTextColor: Colors.grey,
+                  textColor: Theme.of(context).primaryColor,
+                  child: _isLoading
+                      ? CircularProgressIndicator()
+                      : Text(
+                          'ORDER NOW',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ],
             ),
