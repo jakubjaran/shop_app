@@ -59,7 +59,7 @@ class Products with ChangeNotifier {
         'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json';
 
     try {
-      final result = await http.post(url,
+      final response = await http.post(url,
           body: json.encode({
             'title': product.title,
             'description': product.description,
@@ -72,7 +72,7 @@ class Products with ChangeNotifier {
         description: product.description,
         imageUrl: product.imageUrl,
         price: product.price,
-        id: json.decode(result.body)['name'],
+        id: json.decode(response.body)['name'],
       );
       _items.add(newProduct);
       notifyListeners();
