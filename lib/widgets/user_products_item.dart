@@ -13,6 +13,7 @@ class UserProductsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     return Container(
       decoration: BoxDecoration(
         boxShadow: [
@@ -70,10 +71,20 @@ class UserProductsItem extends StatelessWidget {
                           textColor: Theme.of(context).accentColor,
                         ),
                         FlatButton(
-                          onPressed: () {
-                            Provider.of<Products>(context, listen: false)
-                                .deleteItem(id);
-                            Navigator.of(ctx).pop();
+                          onPressed: () async {
+                            try {
+                              Navigator.of(ctx).pop();
+                              await Provider.of<Products>(context,
+                                      listen: false)
+                                  .deleteItem(id);
+                            } catch (error) {
+                              scaffold.showSnackBar(
+                                SnackBar(
+                                  content: Text('Deleting failed!'),
+                                ),
+                              );
+                              Navigator.of(ctx).pop();
+                            }
                           },
                           child: Text('YES'),
                           textColor: Theme.of(context).primaryColor,

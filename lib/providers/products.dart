@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import './product.dart';
+import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -100,22 +101,23 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteItem(String id) {
+  Future<void> deleteItem(String id) async {
     final url =
-        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id';
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
     final existingProductIndex = _items.indexWhere((item) => item.id == id);
     var existingProduct = _items[existingProductIndex];
-    http.delete(url).then((response) {
-      if (response.statusCode >= 400) {
-        // todo throw error
-      }
-      existingProduct = null;
-    }).catchError((error) {
-      print(error);
-      _items.insert(existingProductIndex, existingProduct);
-    });
+
     _items.removeWhere((item) => item.id == id);
     notifyListeners();
+
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Deleting failed!');
+    }
+
+    existingProduct = null;
   }
 
   Future<void> fetchAndSetItems() async {
