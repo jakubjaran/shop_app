@@ -61,7 +61,7 @@ class Orders with ChangeNotifier {
   Future<void> addOrder(List<CartItem> products, double amount) async {
     const url =
         'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/orders.json';
-    final date = DateTime.now().toIso8601String();
+    final timestamp = DateTime.now();
     final productsList = products.map((product) {
       return {
         'id': product.id,
@@ -77,7 +77,7 @@ class Orders with ChangeNotifier {
         body: json.encode({
           'amount': amount,
           'products': productsList,
-          'date': date,
+          'date': timestamp.toIso8601String(),
         }),
       );
 
@@ -85,7 +85,7 @@ class Orders with ChangeNotifier {
         id: json.decode(response.body)['name'],
         amount: amount,
         products: products,
-        date: DateTime.now(),
+        date: timestamp,
       );
 
       _items.insert(0, newOrder);

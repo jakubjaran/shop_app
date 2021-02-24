@@ -6,21 +6,12 @@ import '../providers/orders.dart';
 
 import '../widgets/cart_list_item.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
-
-  @override
-  _CartScreenState createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  var _isLoading = false;
-  var _canOrder = false;
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
-    final orders = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your cart'),
@@ -53,33 +44,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   backgroundColor: Theme.of(context).accentColor,
                 ),
-                FlatButton(
-                  onPressed: cart.itemsCount > 0
-                      ? () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await orders.addOrder(
-                            cart.items.values.toList(),
-                            cart.totalAmount,
-                          );
-                          setState(() {
-                            _isLoading = false;
-                          });
-                          cart.clear();
-                        }
-                      : null,
-                  disabledTextColor: Colors.grey,
-                  textColor: Theme.of(context).primaryColor,
-                  child: _isLoading
-                      ? CircularProgressIndicator()
-                      : Text(
-                          'ORDER NOW',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
+                OrderButton(),
               ],
             ),
           ),
@@ -102,6 +67,47 @@ class _CartScreenState extends State<CartScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
+    return FlatButton(
+      onPressed: (cart.itemsCount > 0) && !_isLoading
+          ? () async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                cart.items.values.toList(),
+                cart.totalAmount,
+              );
+              setState(() {
+                _isLoading = false;
+              });
+              cart.clear();
+            }
+          : null,
+      disabledTextColor: Colors.grey,
+      textColor: Theme.of(context).primaryColor,
+      child: _isLoading
+          ? CircularProgressIndicator()
+          : Text(
+              'ORDER NOW',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
     );
   }
 }
