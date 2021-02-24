@@ -9,6 +9,7 @@ import '../widgets/badge.dart';
 class ProductGridTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final scaffold = Scaffold.of(context);
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context);
     return Container(
@@ -55,8 +56,17 @@ class ProductGridTile extends StatelessWidget {
                 icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border,
                 ),
-                onPressed: () {
-                  product.toggleFavorite();
+                onPressed: () async {
+                  try {
+                    await product.toggleFavorite();
+                  } catch (error) {
+                    scaffold.showSnackBar(
+                      SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text('Toggling favorite status failed!'),
+                      ),
+                    );
+                  }
                 },
                 color: Theme.of(context).accentColor,
               ),
