@@ -33,6 +33,9 @@ class Orders with ChangeNotifier {
       final response = await http.get(url);
       final data = json.decode(response.body);
       final List<Order> loadedOrders = [];
+      if (data == null) {
+        return;
+      }
       data.forEach((orderId, orderData) {
         final products = orderData['products']
             .map<CartItem>((product) => CartItem(
