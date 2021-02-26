@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
 
 enum AuthMode {
   Signup,
@@ -73,7 +76,7 @@ class _AuthCardState extends State<AuthCard> {
     }
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -82,11 +85,15 @@ class _AuthCardState extends State<AuthCard> {
     });
     _formKey.currentState.save();
     if (_authMode == AuthMode.Login) {
-      //login
-      print(_authData);
+      await Provider.of<Auth>(context, listen: false).login(
+        _authData['email'],
+        _authData['password'],
+      );
     } else {
-      //signup
-      print(_authData);
+      await Provider.of<Auth>(context, listen: false).signup(
+        _authData['email'],
+        _authData['password'],
+      );
     }
     setState(() {
       _isLoading = false;
@@ -116,6 +123,7 @@ class _AuthCardState extends State<AuthCard> {
                 prefixIcon: Icon(Icons.mail),
               ),
               keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value.isEmpty || !value.contains('@')) {
                   return 'Invalid email address.';
@@ -134,6 +142,7 @@ class _AuthCardState extends State<AuthCard> {
                 labelText: 'Password',
                 prefixIcon: Icon(Icons.vpn_key),
               ),
+              textInputAction: TextInputAction.next,
               controller: _passwordController,
               validator: (value) {
                 if (value.isEmpty || value.length < 8) {
