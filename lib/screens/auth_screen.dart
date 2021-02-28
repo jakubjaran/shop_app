@@ -57,7 +57,7 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  var _authMode = AuthMode.Signup;
+  var _authMode = AuthMode.Login;
 
   Map<String, String> _authData = {
     'email': '',
@@ -178,7 +178,10 @@ class _AuthCardState extends State<AuthCard> {
                 labelText: 'Password',
                 prefixIcon: Icon(Icons.vpn_key),
               ),
-              textInputAction: TextInputAction.next,
+              textInputAction: _authMode == AuthMode.Signup
+                  ? TextInputAction.next
+                  : TextInputAction.done,
+              obscureText: true,
               controller: _passwordController,
               validator: (value) {
                 if (value.isEmpty || value.length < 8) {
@@ -200,6 +203,7 @@ class _AuthCardState extends State<AuthCard> {
                   labelText: 'Confirm password',
                   prefixIcon: Icon(Icons.vpn_key),
                 ),
+                obscureText: true,
                 validator: _authMode == AuthMode.Signup
                     ? (value) {
                         if (value != _passwordController.text) {
