@@ -27,10 +27,16 @@ class OrdersScreen extends StatelessWidget {
               return Column(children: [
                 Expanded(
                   child: Consumer<Orders>(
-                    builder: (ctx, orders, child) => ListView.builder(
-                        itemCount: orders.items.length,
-                        itemBuilder: (ctx, i) =>
-                            OrderListItem(orders.items[i])),
+                    builder: (ctx, orders, child) => orders.items.length > 0
+                        ? ListView.builder(
+                            itemCount: orders.items.length,
+                            itemBuilder: (ctx, i) =>
+                                OrderListItem(orders.items[i]),
+                          )
+                        : Center(
+                            child: Text(
+                                'No orders yet! Start buying stuff in our shop!'),
+                          ),
                   ),
                 ),
               ]);
