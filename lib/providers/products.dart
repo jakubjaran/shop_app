@@ -37,6 +37,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
+            'creatorId': userId,
           }));
       final newProduct = Product(
         title: product.title,
@@ -91,9 +92,11 @@ class Products with ChangeNotifier {
     existingProduct = null;
   }
 
-  Future<void> fetchAndSetItems() async {
+  Future<void> fetchAndSetItems([bool filterByUser = false]) async {
+    var filterQuery =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url =
-        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken';
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken&$filterQuery';
     try {
       final response = await http.get(url);
       final data = json.decode(response.body) as Map<String, dynamic>;
