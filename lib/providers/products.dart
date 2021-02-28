@@ -26,8 +26,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addItem(Product product) async {
-    const url =
-        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json';
+    final url =
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken';
 
     try {
       final response = await http.post(url,
@@ -57,7 +57,7 @@ class Products with ChangeNotifier {
     final productIndex = _items.indexWhere((item) => item.id == id);
     if (productIndex >= 0) {
       final url =
-          'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
+          'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authToken';
       await http.patch(
         url,
         body: json.encode({
@@ -74,7 +74,7 @@ class Products with ChangeNotifier {
 
   Future<void> deleteItem(String id) async {
     final url =
-        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authToken';
     final existingProductIndex = _items.indexWhere((item) => item.id == id);
     var existingProduct = _items[existingProductIndex];
 

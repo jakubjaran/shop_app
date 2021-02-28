@@ -22,9 +22,9 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String authToken) async {
     final url =
-        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json';
+        'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products/$id.json?auth=$authToken';
     isFavorite = !isFavorite;
     notifyListeners();
 
