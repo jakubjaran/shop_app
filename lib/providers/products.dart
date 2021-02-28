@@ -10,8 +10,9 @@ class Products with ChangeNotifier {
   List<Product> _items = [];
 
   final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -36,7 +37,6 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
           }));
       final newProduct = Product(
         title: product.title,
@@ -92,7 +92,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetItems() async {
-    final url =
+    var url =
         'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
@@ -101,6 +101,10 @@ class Products with ChangeNotifier {
       if (data == null) {
         return;
       }
+      url =
+          'https://shopapp-c2c88-default-rtdb.europe-west1.firebasedatabase.app/userFavorites/$userId.json?auth=$authToken';
+      final favoriteResponse = await http.get(url);
+      final favoriteData = json.decode(favoriteResponse.body);
       data.forEach((prodId, prodData) {
         loadedProducts.add(Product(
           id: prodId,
@@ -108,7 +112,8 @@ class Products with ChangeNotifier {
           imageUrl: prodData['imageUrl'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavorite: prodData['isFavorite'],
+          isFavorite:
+              favoriteData == null ? false : favoriteData[prodId] ?? false,
         ));
       });
       _items = loadedProducts;
