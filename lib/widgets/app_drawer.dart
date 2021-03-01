@@ -23,6 +23,7 @@ class AppDrawer extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
               Provider.of<Auth>(context, listen: false).logout();
+              Navigator.of(context).pushReplacementNamed('/');
             },
             child: Text('YES'),
           ),
