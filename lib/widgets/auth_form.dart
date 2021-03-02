@@ -27,25 +27,25 @@ class _AuthFormState extends State<AuthForm>
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  AnimationController _animController;
-  Animation<Size> _heightAnimation;
+  // AnimationController _animController;
+  // Animation<Size> _heightAnimation;
 
-  @override
-  void initState() {
-    _animController =
-        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
-    _heightAnimation = Tween<Size>(
-            begin: Size(double.infinity, 350), end: Size(double.infinity, 450))
-        .animate(
-            CurvedAnimation(parent: _animController, curve: Curves.easeIn));
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   _animController =
+  //       AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+  //   _heightAnimation = Tween<Size>(
+  //           begin: Size(double.infinity, 350), end: Size(double.infinity, 450))
+  //       .animate(
+  //           CurvedAnimation(parent: _animController, curve: Curves.easeIn));
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    _animController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _animController.dispose();
+  //   super.dispose();
+  // }
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -70,12 +70,12 @@ class _AuthFormState extends State<AuthForm>
       setState(() {
         _authMode = AuthMode.Login;
       });
-      _animController.reverse();
+      // _animController.reverse();
     } else {
       setState(() {
         _authMode = AuthMode.Signup;
       });
-      _animController.forward();
+      // _animController.forward();
     }
   }
 
@@ -123,13 +123,11 @@ class _AuthFormState extends State<AuthForm>
     final deviceSize = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
-      child: AnimatedBuilder(
-        builder: (ctx, ch) => Container(
-          width: deviceSize.width * 0.8,
-          height: _heightAnimation.value.height,
-          child: ch,
-        ),
-        animation: _heightAnimation,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+        width: deviceSize.width * 0.8,
+        height: _authMode == AuthMode.Login ? 350 : 450,
         child: ListView(
           children: [
             TextFormField(
