@@ -38,7 +38,6 @@ class _AuthFormState extends State<AuthForm>
             begin: Size(double.infinity, 350), end: Size(double.infinity, 450))
         .animate(
             CurvedAnimation(parent: _animController, curve: Curves.easeIn));
-    _heightAnimation.addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -124,9 +123,13 @@ class _AuthFormState extends State<AuthForm>
     final deviceSize = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
-      child: Container(
-        width: deviceSize.width * 0.8,
-        height: _heightAnimation.value.height,
+      child: AnimatedBuilder(
+        builder: (ctx, ch) => Container(
+          width: deviceSize.width * 0.8,
+          height: _heightAnimation.value.height,
+          child: ch,
+        ),
+        animation: _heightAnimation,
         child: ListView(
           children: [
             TextFormField(
