@@ -27,25 +27,28 @@ class _AuthFormState extends State<AuthForm>
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  // AnimationController _animController;
-  // Animation<Size> _heightAnimation;
+  AnimationController _animController;
+  Animation<double> _fadeAnimation;
 
-  // @override
-  // void initState() {
-  //   _animController =
-  //       AnimationController(duration: Duration(milliseconds: 300), vsync: this);
-  //   _heightAnimation = Tween<Size>(
-  //           begin: Size(double.infinity, 350), end: Size(double.infinity, 450))
-  //       .animate(
-  //           CurvedAnimation(parent: _animController, curve: Curves.easeIn));
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    _animController =
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+    _fadeAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animController,
+      curve: Curves.easeIn,
+    ));
+    super.initState();
+  }
 
-  // @override
-  // void dispose() {
-  //   _animController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _animController.dispose();
+    super.dispose();
+  }
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -70,12 +73,12 @@ class _AuthFormState extends State<AuthForm>
       setState(() {
         _authMode = AuthMode.Login;
       });
-      // _animController.reverse();
+      _animController.reverse();
     } else {
       setState(() {
         _authMode = AuthMode.Signup;
       });
-      // _animController.forward();
+      _animController.forward();
     }
   }
 
@@ -128,7 +131,7 @@ class _AuthFormState extends State<AuthForm>
         curve: Curves.easeIn,
         width: deviceSize.width * 0.8,
         height: _authMode == AuthMode.Login ? 350 : 450,
-        child: ListView(
+        child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(
@@ -173,23 +176,33 @@ class _AuthFormState extends State<AuthForm>
             SizedBox(
               height: 20,
             ),
-            if (_authMode == AuthMode.Signup)
-              TextFormField(
-                enabled: _authMode == AuthMode.Signup,
-                decoration: InputDecoration(
-                  labelText: 'Confirm password',
-                  prefixIcon: Icon(Icons.vpn_key),
-                ),
-                obscureText: true,
-                validator: _authMode == AuthMode.Signup
-                    ? (value) {
-                        if (value != _passwordController.text) {
-                          return 'Passwords do not match.';
-                        }
-                        return null;
-                      }
-                    : null,
+            AnimatedContainer(
+              constraints: BoxConstraints(
+                minHeight: _authMode == AuthMode.Signup ? 60 : 0,
+                maxHeight: _authMode == AuthMode.Signup ? 120 : 0,
               ),
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: TextFormField(
+                  enabled: _authMode == AuthMode.Signup,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm password',
+                    prefixIcon: Icon(Icons.vpn_key),
+                  ),
+                  obscureText: true,
+                  validator: _authMode == AuthMode.Signup
+                      ? (value) {
+                          if (value != _passwordController.text) {
+                            return 'Passwords do not match.';
+                          }
+                          return null;
+                        }
+                      : null,
+                ),
+              ),
+            ),
             SizedBox(height: 50),
             if (_isLoading)
               CircularProgressIndicator()

@@ -67,7 +67,7 @@ class AuthScreen extends StatelessWidget {
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final deviceSize = MediaQuery.of(context).size;
+// final deviceSize = MediaQuery.of(context).size;
 //     return Container(
 //       // decoration: BoxDecoration(
 //       //   boxShadow: [
