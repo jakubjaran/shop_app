@@ -19,7 +19,11 @@ class _OrderListItemState extends State<OrderListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeIn,
+      height:
+          _expanded ? min(widget.order.products.length * 20.0 + 100, 200) : 70,
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(color: Colors.black12, blurRadius: 6),
@@ -50,25 +54,28 @@ class _OrderListItemState extends State<OrderListItem> {
               },
             ),
           ),
-          if (_expanded)
-            Container(
-              height: min(widget.order.products.length * 20.0 + 30, 80),
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-              child: ListView(
-                children: widget.order.products
-                    .map((prod) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(prod.title),
-                              Text('${prod.quantity}x \$${prod.price}'),
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              ),
-            )
+          AnimatedContainer(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeIn,
+            height: _expanded
+                ? min(widget.order.products.length * 20.0 + 30, 80)
+                : 0,
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+            child: ListView(
+              children: widget.order.products
+                  .map((prod) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(prod.title),
+                            Text('${prod.quantity}x \$${prod.price}'),
+                          ],
+                        ),
+                      ))
+                  .toList(),
+            ),
+          )
         ],
       ),
     );
