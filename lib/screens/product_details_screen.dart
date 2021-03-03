@@ -19,9 +19,6 @@ class ProductDetailsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            pinned: true,
-            expandedHeight: 300,
-            title: Text(loadedProduct.title),
             actions: [
               Consumer<Cart>(
                 builder: (_, cart, child) => Badge(
@@ -36,11 +33,17 @@ class ProductDetailsScreen extends StatelessWidget {
                 ),
               ),
             ],
+            pinned: true,
+            expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
                 tag: loadedProduct.id,
-                child: Image.network(loadedProduct.imageUrl),
+                child: Image.network(
+                  loadedProduct.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
+              title: Text(loadedProduct.title),
             ),
           ),
           SliverList(
